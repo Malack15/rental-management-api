@@ -1,42 +1,95 @@
 // js/script.js
 
-document.getElementById('registerForm')?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const role = document.getElementById('role').value;
+const API_URL = 'http://localhost:5000';
+
+// Register
+document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
   
-    const response = await fetch('http://localhost:5000/auth/register', {
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const role = document.getElementById('role').value;
+
+  try {
+    const response = await fetch(`${API_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password, role })
     });
-  
-    const data = await response.json();
+
     if (response.ok) {
-      alert('Registration successful!');
+      alert('Registration successful! Please log in.');
+      window.location.href = 'login.html';
     } else {
-      alert(`Error: ${data.msg}`);
+      const data = await response.json();
+      alert(`Registration failed: ${data.msg || 'Error'}`);
     }
-  });
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+// Login
+document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
   
-  document.getElementById('loginForm')?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const email = document.getElementById('loginEmail').value;
-    const password = document.getElementById('loginPassword').value;
-  
-    const response = await fetch('http://localhost:5000/auth/login', {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+
+  try {
+    const response = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-  
+
     const data = await response.json();
     if (response.ok) {
-      alert('Login successful!');
+      localStorage.setItem('token', data.token);
+      window.location.href = 'dashboard.html';
     } else {
-      alert(`Error: ${data.msg}`);
+      alert(`Login failed: ${data.msg || 'Error'}`);
     }
-  });
-  
+  } catch (error) {
+    console.error('Error:', error);
+  }
+});
+
+// Fetch properties and display on dashboard
+async function loadProperties() {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch(`${API_URL}/properties`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (response.ok) {
+      const properties = await response.json();
+      const propertyList = document.getElementById('propertyList');
+      propertyList.innerHTML = properties.map(property => `
+        <div class="property">
+          <h3>${property.title}</h3>
+          <p>${property.description}</p>
+          <p>Price: $${property.price}</p>
+          <p>Landlord: ${property.landlord.name}</p>
+        </div>
+      `).join('');
+    } else {
+      alert('Failed to load properties');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+// Load properties if on dashboard
+if (window.location.pathname.endsWith('dashboard.html')) {
+  loadProperties();
+}
+
+// Logout functionality
+document.getElementById('logout')?.addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+});
