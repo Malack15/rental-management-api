@@ -1,9 +1,10 @@
+// routes/property.js
 const express = require('express');
 const { addProperty, getProperties } = require('../controllers/propertyController');
-const authenticate = require('../middleware/auth');
+const authMiddleware = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.post('/add', authenticate, addProperty);
-router.get('/', authenticate, getProperties);
+router.post('/', authMiddleware, addProperty);
+router.get('/', getProperties);
 
 module.exports = router;

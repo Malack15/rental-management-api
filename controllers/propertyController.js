@@ -1,30 +1,21 @@
+// controllers/propertyController.js
 const Property = require('../models/property');
 
 exports.addProperty = async (req, res) => {
-  const { address, rentAmount } = req.body;
-  const landlord = req.user.userId;
-
   try {
-    const newProperty = new Property({ address, rentAmount, landlord });
-    await newProperty.save();
-    res.status(201).json(newProperty);
+    const { title, description, address, price } = req.body;
+    const property = await Property.create({ title, description, address, price, landlord: req.user.id });
+    res.status(201).json(property);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add property' });
+    res.status(500).json({ error: error.message });
   }
 };
 
 exports.getProperties = async (req, res) => {
-  const { role, userId } = req.user;
-
   try {
-    let properties;
-    if (role === 'landlord') {
-      properties = await Property.find({ landlord: userId });
-    } else if (role === 'tenant') {
-      properties = await Property.find({ tenants: userId });
-    }
-    res.status(200).json(properties);
+    const properties = await Property.find().populate('landlord', 'name email');
+    res.json(properties);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to retrieve properties' });
+    res.status(500).json({ error: error.message });
   }
 };

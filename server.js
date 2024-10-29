@@ -1,33 +1,18 @@
+// server.js
 const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const cors = require('cors');
+const connectDB = require('./config/db');
 const authRoutes = require('./routes/auth');
 const propertyRoutes = require('./routes/property');
-const paymentRoutes = require('./routes/payment');
-const maintenanceRoutes = require('./routes/maintenance');
-
-dotenv.config();
+require('dotenv').config();
 
 const app = express();
+connectDB();
+app.use(cors());
 app.use(express.json());
 
-// Routes
 app.use('/auth', authRoutes);
 app.use('/properties', propertyRoutes);
 
-app.use('/payments', paymentRoutes);
-app.use('/maintenance', maintenanceRoutes);
-
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Connected to database'))
-  .catch(err => console.log('Failed to connect to database:', err));
-
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
-
-const cors = require('cors');
-app.use(cors());
-app.use(cors({ origin: 'http://localhost:5500' })); 
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

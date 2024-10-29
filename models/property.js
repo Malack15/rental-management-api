@@ -1,12 +1,12 @@
+// models/Property.js
 const mongoose = require('mongoose');
 
-const propertySchema = new mongoose.Schema({
+const PropertySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
   address: { type: String, required: true },
+  price: { type: Number, required: true },
   landlord: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  tenants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-  rentAmount: { type: Number, required: true },
-  leaseStart: { type: Date },
-  leaseEnd: { type: Date }
 });
 
-module.exports = mongoose.model('Property', propertySchema);
+module.exports = mongoose.model('Property', PropertySchema);
