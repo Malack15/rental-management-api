@@ -2,7 +2,7 @@
 
 const API_URL = 'http://localhost:5000';
 
-// Register
+// Registration form submission
 document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -23,14 +23,14 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
       window.location.href = 'login.html';
     } else {
       const data = await response.json();
-      alert(`Registration failed: ${data.msg || 'Error'}`);
+      alert(`Registration failed: ${data.message || 'Error'}`);
     }
   } catch (error) {
     console.error('Error:', error);
   }
 });
 
-// Login
+// Login form submission
 document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   
@@ -49,14 +49,14 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
       localStorage.setItem('token', data.token);
       window.location.href = 'dashboard.html';
     } else {
-      alert(`Login failed: ${data.msg || 'Error'}`);
+      alert(`Login failed: ${data.message || 'Error'}`);
     }
   } catch (error) {
     console.error('Error:', error);
   }
 });
 
-// Fetch properties and display on dashboard
+// Dashboard: Load properties if token is present
 async function loadProperties() {
   const token = localStorage.getItem('token');
   try {
@@ -83,7 +83,7 @@ async function loadProperties() {
   }
 }
 
-// Load properties if on dashboard
+// Load properties on the dashboard
 if (window.location.pathname.endsWith('dashboard.html')) {
   loadProperties();
 }
