@@ -3,31 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register - Rental Management</title>
+  <title>Rental Management Dashboard</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <h1>Rental Management Dashboard</h1>
+    <button id="logout">Logout</button>
+  </header>
   <div class="container">
-    <h2>Register</h2>
-    <form id="registerForm">
-      <label for="name">Name:</label>
-      <input type="text" id="name" required>
-      
-      <label for="email">Email:</label>
-      <input type="email" id="email" required>
-      
-      <label for="password">Password:</label>
-      <input type="password" id="password" required>
-      
-      <label for="role">Role:</label>
-      <select id="role">
-        <option value="landlord">Landlord</option>
-        <option value="tenant">Tenant</option>
-      </select>
-      
-      <button type="submit">Register</button>
-      <p>Already have an account? <a href="login.html">Login</a></p>
-    </form>
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#" onclick="showSection('properties')">Properties</a></li>
+        <li><a href="#" onclick="showSection('payments')">Payments</a></li>
+        <li><a href="#" onclick="showSection('maintenance')">Maintenance Requests</a></li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <section id="properties" class="section" style="display:none;">
+        <h2>Property Management</h2>
+        <div id="propertyList"></div>
+      </section>
+      <section id="payments" class="section" style="display:none;">
+        <h2>Payment Management</h2>
+        <div id="paymentList"></div>
+      </section>
+      <section id="maintenance" class="section" style="display:none;">
+        <h2>Maintenance Requests</h2>
+        <div id="maintenanceList"></div>
+      </section>
+    </main>
   </div>
   <script src="script.js"></script>
 </body>

@@ -1,6 +1,14 @@
-// js/script.js
+const BASE_URL = 'http://localhost:5000';
 
-const API_URL = 'http://localhost:5000';
+// Helper function for navigating sections
+function showSection(section) {
+  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+  document.getElementById(section).style.display = 'block';
+
+  if (section === 'properties') loadProperties();
+  else if (section === 'payments') loadPayments();
+  else if (section === 'maintenance') loadMaintenanceRequests();
+}
 
 // Registration form submission
 document.getElementById('registerForm')?.addEventListener('submit', async (e) => {
@@ -12,7 +20,7 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
   const role = document.getElementById('role').value;
 
   try {
-    const response = await fetch(`${API_URL}/auth/register`, {
+    const response = await fetch(`${BASE_URL}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, password, role })
@@ -38,7 +46,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   const password = document.getElementById('password').value;
 
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
@@ -56,61 +64,13 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   }
 });
 
-// Dashboard: Load properties if token is present
+// Properties
 async function loadProperties() {
   const token = localStorage.getItem('token');
   try {
-    const response = await fetch(`${API_URL}/properties`, {
+    const response = await fetch(`${BASE_URL}/properties`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
-
-    if (response.ok) {
-      const properties = await response.json();
-      const propertyList = document.getElementById('propertyList');
-      propertyList.innerHTML = properties.map(property => `
-        <div class="property">
-          <h3>${property.title}</h3>
-          <p>${property.description}</p>
-          <p>Price: $${property.price}</p>
-          <p>Landlord: ${property.landlord.name}</p>
-        </div>
-      `).join('');
-    } else {
-      alert('Failed to load properties');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-  }
-}
-
-// Load properties on the dashboard
-if (window.location.pathname.endsWith('dashboard.html')) {
-  loadProperties();
-}
-
-// Logout functionality
-document.getElementById('logout')?.addEventListener('click', () => {
-  localStorage.removeItem('token');
-  window.location.href = 'login.html';
-});
-// script.js
-
-const BASE_URL = 'http://localhost:5000';
-
-// Display the relevant section based on the navigation click
-function showSection(section) {
-  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-  document.getElementById(section).style.display = 'block';
-
-  if (section === 'properties') loadProperties();
-  else if (section === 'payments') loadPayments();
-  else if (section === 'maintenance') loadMaintenanceRequests();
-}
-
-// Load properties data
-async function loadProperties() {
-  try {
-    const response = await fetch(`${BASE_URL}/properties`);
     const properties = await response.json();
     const propertyList = document.getElementById('propertyList');
     propertyList.innerHTML = properties.map(prop => `
@@ -118,6 +78,7 @@ async function loadProperties() {
         <h4>${prop.name}</h4>
         <p>Location: ${prop.location}</p>
         <p>Price: $${prop.price}</p>
+        <button onclick="deleteProperty('${prop._id}')">Delete</button>
       </div>
     `).join('');
   } catch (error) {
@@ -125,10 +86,45 @@ async function loadProperties() {
   }
 }
 
-// Load payments data
-async function loadPayments() {
+async function addProperty() {
+  const token = localStorage.getItem('token');
+  const name = document.getElementById('propertyName').value;
+  const location = document.getElementById('propertyLocation').value;
+  const price = document.getElementById('propertyPrice').value;
+
   try {
-    const response = await fetch(`${BASE_URL}/payments`);
+    await fetch(`${BASE_URL}/properties`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, location, price })
+    });
+    hidePropertyForm();
+    loadProperties();
+  } catch (error) {
+    console.error('Error adding property:', error);
+  }
+}
+
+async function deleteProperty(id) {
+  const token = localStorage.getItem('token');
+  try {
+    await fetch(`${BASE_URL}/properties/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    loadProperties();
+  } catch (error) {
+    console.error('Error deleting property:', error);
+  }
+}
+
+// Payments
+async function loadPayments() {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch(`${BASE_URL}/payments`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     const payments = await response.json();
     const paymentList = document.getElementById('paymentList');
     paymentList.innerHTML = payments.map(pay => `
@@ -136,6 +132,7 @@ async function loadPayments() {
         <p>Amount: $${pay.amount}</p>
         <p>Date: ${new Date(pay.date).toLocaleDateString()}</p>
         <p>Status: ${pay.status}</p>
+        <button onclick="deletePayment('${pay._id}')">Delete</button>
       </div>
     `).join('');
   } catch (error) {
@@ -143,17 +140,53 @@ async function loadPayments() {
   }
 }
 
-// Load maintenance requests data
-async function loadMaintenanceRequests() {
+async function addPayment() {
+  const token = localStorage.getItem('token');
+  const amount = document.getElementById('paymentAmount').value;
+  const date = document.getElementById('paymentDate').value;
+  const status = document.getElementById('paymentStatus').value;
+
   try {
-    const response = await fetch(`${BASE_URL}/maintenance`);
+    await fetch(`${BASE_URL}/payments`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount, date, status })
+    });
+    hidePaymentForm();
+    loadPayments();
+  } catch (error) {
+    console.error('Error adding payment:', error);
+  }
+}
+
+async function deletePayment(id) {
+  const token = localStorage.getItem('token');
+  try {
+    await fetch(`${BASE_URL}/payments/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    loadPayments();
+  } catch (error) {
+    console.error('Error deleting payment:', error);
+  }
+}
+
+// Maintenance Requests
+async function loadMaintenanceRequests() {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch(`${BASE_URL}/maintenance`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
     const requests = await response.json();
     const maintenanceList = document.getElementById('maintenanceList');
     maintenanceList.innerHTML = requests.map(req => `
       <div class="maintenance-card">
-        <p>Request: ${req.issue}</p>
+        <p>Issue: ${req.issue}</p>
         <p>Status: ${req.status}</p>
         <p>Date: ${new Date(req.date).toLocaleDateString()}</p>
+        <button onclick="deleteMaintenance('${req._id}')">Delete</button>
       </div>
     `).join('');
   } catch (error) {
@@ -161,5 +194,44 @@ async function loadMaintenanceRequests() {
   }
 }
 
-// Initialize the first section
-showSection('properties');
+async function addMaintenance() {
+  const token = localStorage.getItem('token');
+  const issue = document.getElementById('maintenanceIssue').value;
+  const status = document.getElementById('maintenanceStatus').value;
+
+  try {
+    await fetch(`${BASE_URL}/maintenance`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ issue, status })
+    });
+    hideMaintenanceForm();
+    loadMaintenanceRequests();
+  } catch (error) {
+    console.error('Error adding maintenance request:', error);
+  }
+}
+
+async function deleteMaintenance(id) {
+  const token = localStorage.getItem('token');
+  try {
+    await fetch(`${BASE_URL}/maintenance/${id}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    loadMaintenanceRequests();
+  } catch (error) {
+    console.error('Error deleting maintenance request:', error);
+  }
+}
+
+// Logout
+document.getElementById('logout')?.addEventListener('click', () => {
+  localStorage.removeItem('token');
+  window.location.href = 'login.html';
+});
+
+// Initial load
+if (window.location.pathname.endsWith('dashboard.html')) {
+  showSection('properties');
+}
