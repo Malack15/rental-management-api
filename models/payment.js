@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const paymentSchema = new mongoose.Schema({
-  tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  property: { type: mongoose.Schema.Types.ObjectId, ref: 'Property', required: true },
-  amount: { type: Number, required: true },
-  datePaid: { type: Date, default: Date.now },
-  dueDate: { type: Date, required: true }
+const PaymentSchema = new mongoose.Schema({
+  amount: Number,
+  date: Date,
+  status: String,
 });
 
-module.exports = mongoose.model('Payment', paymentSchema);
+const Payment = mongoose.models.Payment || mongoose.model('Payment', PaymentSchema);
+
+module.exports = Payment;

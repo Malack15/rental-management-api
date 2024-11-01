@@ -3,49 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - Rental Management</title>
+  <title>Rental Management Dashboard</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Navigation Section -->
   <header>
-    <nav>
-      <h1>Rental Management Dashboard</h1>
-      <button id="logout">Logout</button>
-    </nav>
+    <h1>Rental Management Dashboard</h1>
+    <button id="logout">Logout</button>
   </header>
 
-  <!-- Main Content Section -->
   <div class="container">
-    <!-- User Info Section -->
-    <section id="userInfo">
-      <h2>Welcome, <span id="userName">User</span></h2>
-      <p>Email: <span id="userEmail">user@example.com</span></p>
-      <button id="editProfile">Edit Profile</button>
-    </section>
+    <aside class="sidebar">
+      <ul>
+        <li><a href="#" onclick="showSection('properties')">Properties</a></li>
+        <li><a href="#" onclick="showSection('payments')">Payments</a></li>
+        <li><a href="#" onclick="showSection('maintenance')">Maintenance Requests</a></li>
+      </ul>
+    </aside>
 
-    <!-- Property Management Section -->
-    <section id="propertySection">
-      <h2>Manage Properties</h2>
-      <button id="addProperty">Add New Property</button>
-      <div id="propertyList">
-        <!-- Properties will be dynamically loaded here -->
-      </div>
-    </section>
-  </div>
+    <main class="main-content">
+      <section id="properties" class="section" style="display:none;">
+        <h2>Property Management</h2>
+        <div id="propertyList"></div>
+      </section>
 
-  <!-- Property Details Modal -->
-  <div id="propertyModal" class="modal">
-    <div class="modal-content">
-      <span class="close-button" id="closeModal">&times;</span>
-      <h3>Property Details</h3>
-      <p><strong>Address:</strong> <span id="propertyAddress"></span></p>
-      <p><strong>Owner:</strong> <span id="propertyOwner"></span></p>
-      <p><strong>Rent:</strong> $<span id="propertyRent"></span> per month</p>
-      <p><strong>Status:</strong> <span id="propertyStatus"></span></p>
-      <button id="editProperty">Edit</button>
-      <button id="deleteProperty">Delete</button>
-    </div>
+      <section id="payments" class="section" style="display:none;">
+        <h2>Payment Management</h2>
+        <div id="paymentList"></div>
+      </section>
+
+      <section id="maintenance" class="section" style="display:none;">
+        <h2>Maintenance Requests</h2>
+        <div id="maintenanceList"></div>
+      </section>
+    </main>
   </div>
 
   <script src="script.js"></script>
