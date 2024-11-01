@@ -1,40 +1,49 @@
 /* Basic Reset */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
 }
 
+/* General Body Styling */
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
   min-height: 100vh;
-  background-color: #f0f2f5;
+  display: flex;
 }
 
+/* Centered Form Container Styling */
 .container {
-  background-color: #fff;
-  padding: 2rem;
   max-width: 400px;
   width: 100%;
+  padding: 2rem;
+  background-color: #fff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  margin: auto;
 }
 
+/* Form Header */
 h2 {
   text-align: center;
   margin-bottom: 1.5rem;
   color: #333;
 }
 
+/* Form Label Styling */
 label {
   font-weight: bold;
   color: #555;
+  margin-top: 0.5rem;
 }
 
-input, select, button {
+/* Input, Select, and Button Styling */
+input,
+select,
+button {
   width: 100%;
   margin-top: 0.5rem;
   padding: 0.75rem;
@@ -43,10 +52,12 @@ input, select, button {
   outline: none;
 }
 
-input:focus, select:focus {
+input:focus,
+select:focus {
   border-color: #4a90e2;
 }
 
+/* Button Styling */
 button {
   background-color: #4a90e2;
   color: #fff;
@@ -60,6 +71,7 @@ button:hover {
   background-color: #357abd;
 }
 
+/* Login Link */
 .login-link {
   margin-top: 1rem;
   text-align: center;
@@ -70,6 +82,7 @@ button:hover {
   text-decoration: none;
 }
 
+/* Error Message Styling */
 .error-message {
   color: #e74c3c;
   background: #fdecea;
@@ -77,16 +90,6 @@ button:hover {
   border-radius: 4px;
   margin-bottom: 1rem;
   text-align: center;
-}
-
-
-/* Body Styling */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
 
 /* Sidebar Styling */
@@ -118,15 +121,11 @@ body {
   background-color: #555;
 }
 
-.container {
-  display: flex;
-}
-
 /* Main Content Styling */
 .main-content {
   margin-left: 200px;
   padding: 20px;
-  width: 100%;
+  width: calc(100% - 200px);
 }
 
 header {
@@ -138,9 +137,12 @@ header {
   align-items: center;
 }
 
-.property-card, .payment-card, .maintenance-card {
+/* Cards for Property, Payment, and Maintenance */
+.property-card,
+.payment-card,
+.maintenance-card {
   background-color: white;
-  margin: 10px;
+  margin: 10px 0;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
