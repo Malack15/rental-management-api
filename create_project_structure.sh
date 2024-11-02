@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Define the root directory
-ROOT_DIR="rental-management"
-
 # Array of directories to create
 DIRECTORIES=(
   "$ROOT_DIR/backend/controllers"
