@@ -7,12 +7,29 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Register</h1>
-  <form id="registerForm">
-    <input type="text" placeholder="Name" required>
-    <input type="email" placeholder="Email" required>
-    <input type="password" placeholder="Password" required>
-    <button type="submit">Register</button>
-  </form>
+  <div class="container">
+    <h1>Register</h1>
+    <form id="registerForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <label for="role">Role:</label>
+      <select id="role" required>
+        <option value="" disabled selected>Select role</option>
+        <option value="Tenant">User</option>
+        <option value="Landlord">Admin</option>
+      </select>
+
+      <button type="submit">Register</button>
+    </form>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

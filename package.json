@@ -4,7 +4,8 @@
   "description": "Rental Management API\r Rental Management API is a RESTful API designed to streamline rental property management for landlords and tenants. It enables landlords to manage properties, track tenants, handle rent payments, and manage maintenance requests. Tenants can view property information, pay rent, and request maintenance, all in one system.\r Features\r User Authentication: Role-based access control for landlords and tenants.\r Property Management: Landlords can add and manage properties.\r Rent Payment Tracking: Tenants can make rent payments, and landlords can track payments.\r Maintenance Requests: Tenants can request property maintenance, and landlords can manage requests.\r Secure Data Handling: Password hashing with bcrypt and token-based authentication with JWT.\r Technologies Used\r Backend: Node.js, Express.js\r Database: MongoDB (with Mongoose)\r Authentication: JSON Web Tokens (JWT) and bcrypt for password hashing\r Environment Management: dotenv",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":"node --env-file=.env backend/server.js",
+    "dev": "node --watch --trace-warnings --env-file=.env backend/server.js"
   },
   "keywords": [],
   "author": "",

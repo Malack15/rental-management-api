@@ -18,7 +18,7 @@ app.use('/payments', paymentRoutes);
 app.use('/maintenance', maintenanceRoutes);
 
 // Connect to MongoDB
-mongoose.connect(config.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.mongoURI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
