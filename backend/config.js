@@ -1,7 +1,6 @@
-require('dotenv').config();
-
+// config.js
 module.exports = {
-  port: process.env.PORT,
-  mongoURI: process.env.MONGO_URI,
-  jwtSecret: process.env.JWT_SECRET,
-};
+    mongoURI: 'mongodb+srv://malackokeiga:OkUMcy32TrZ6Z4z8@mk.lqani.mongodb.net/Rental-Management?retryWrites=true&w=majority&appName=MK',
+    jwtSecret: 'your_jwt_secret'
+  };
+  

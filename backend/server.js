@@ -1,6 +1,8 @@
+// backend/server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const config = require('./config');
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const propertyRoutes = require('./routes/propertyRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
@@ -10,6 +12,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cors());
 
 // Routes
 app.use('/auth', authRoutes);
